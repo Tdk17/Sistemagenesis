@@ -24,7 +24,7 @@ Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da 
 ## Plano de implementação
 
 - [x] Registrar o escopo e a arquitetura inicial.
-- [ ] Criar a base Flutter Web/PWA seguindo a organização do Cormex.
+- [x] Criar o scaffold Flutter Web/PWA com navegação e módulos iniciais.
 - [ ] Implementar armazenamento local persistente e migrações.
 - [ ] Implementar clientes, projetos, agenda e financeiro.
 - [ ] Conectar ao Back4App com autenticação e permissões restritas.
@@ -41,4 +41,4 @@ O PWA pode trabalhar sem conexão depois que seus arquivos forem armazenados no 
 
 ## Estado
 
-Repositório iniciado do zero. A próxima entrega é a base de navegação e layout; em seguida implementamos o armazenamento local e o primeiro ciclo de sincronização.
+Repositório iniciado do zero. O scaffold da navegação e do layout está criado; os módulos ainda são placeholders. Próxima etapa: armazenamento local persistente, formulários funcionais e o primeiro ciclo de sincronização.
