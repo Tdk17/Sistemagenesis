@@ -5,7 +5,8 @@ Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da 
 ## Direção técnica (padrão Cormex)
 
 - Flutter Web com experiência PWA para instalar no notebook.
-- `get_it` para dependências, `go_router` para navegação e `signals` para estado reativo.
+- Mesma organização do Cormex: `lib/Src/Config`, `Connection`, `Dependencies`, `Models`, `Pages/<Módulo>/{Controller,Repository}` e `Routes`.
+- `get_it` para dependências, `go_router` para navegação, `signals` para estado reativo e Dio para comunicação HTTP.
 - Dio para chamadas HTTP e integração com Back4App/Parse.
 - Arquitetura offline-first: persistir primeiro no armazenamento local do navegador; sincronizar com Back4App quando houver conexão.
 - Fila de sincronização idempotente, com identificador único por registro e tratamento explícito de conflitos.
@@ -41,4 +42,4 @@ O PWA pode trabalhar sem conexão depois que seus arquivos forem armazenados no 
 
 ## Estado
 
-Repositório iniciado do zero. O scaffold da navegação e do layout está criado; os módulos ainda são placeholders. Próxima etapa: armazenamento local persistente, formulários funcionais e o primeiro ciclo de sincronização.
+Repositório iniciado do zero. O scaffold de configuração, dependências, rotas, tema e módulos está criado no padrão Cormex; as telas de projetos, clientes, agenda e financeiro ainda são placeholders. Próxima etapa: armazenamento local persistente e CRUD de projetos/clientes.
