@@ -1,0 +1,23 @@
+name: sistema_genesis
+description: Sistema pessoal de projetos, clientes, agenda e financeiro.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.11.1
+  get_it: ^9.3.0
+  go_router: ^18.1.2
+  signals_flutter: ^7.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
