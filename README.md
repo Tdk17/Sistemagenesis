@@ -5,9 +5,8 @@ Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da 
 ## Direção técnica (padrão Cormex)
 
 - Flutter Web com experiência PWA para instalar no notebook.
-- Mesma organização do Cormex: `lib/Src/Config`, `Connection`, `Dependencies`, `Models`, `Pages/<Módulo>/{Controller,Repository}` e `Routes`.
+- Organização baseada no Cormex: `lib/Src/Config`, `Connection`, `Dependencies`, `Models`, `Pages` e `Routes`; cada módulo receberá `Controller` e `Repository` ao ganhar CRUD.
 - `get_it` para dependências, `go_router` para navegação, `signals` para estado reativo e Dio para comunicação HTTP.
-- Dio para chamadas HTTP e integração com Back4App/Parse.
 - Arquitetura offline-first: persistir primeiro no armazenamento local do navegador; sincronizar com Back4App quando houver conexão.
 - Fila de sincronização idempotente, com identificador único por registro e tratamento explícito de conflitos.
 - A Master Key e a REST API Key do Parse nunca devem ser incluídas no cliente.
