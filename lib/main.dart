@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 
+import 'app/genesis_app.dart';
 import 'core/di/injection.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await configureDependencies();
+  configureDependencies();
+  runApp(const GenesisApp());
 }
