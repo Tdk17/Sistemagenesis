@@ -4,14 +4,7 @@ import 'package:sistema_genesis/Src/Pages/Clients/clients.dart';
 import 'package:sistema_genesis/Src/Pages/Dashboard/dashboard.dart';
 import 'package:sistema_genesis/Src/Pages/Finance/finance.dart';
 import 'package:sistema_genesis/Src/Pages/Projects/projects.dart';
-
-abstract final class AppRoutes {
-  static const dashboard = '/';
-  static const projects = '/projetos';
-  static const clients = '/clientes';
-  static const agenda = '/agenda';
-  static const finance = '/financeiro';
-}
+import 'package:sistema_genesis/Src/Routes/appRoutes.dart';
 
 GoRouter createAppRouter() {
   return GoRouter(
