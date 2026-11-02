@@ -2,13 +2,14 @@
 
 Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da empresa.
 
-## Direção técnica
+## Direção técnica (padrão Cormex)
 
-- Aplicativo Flutter para uso no notebook.
-- Arquitetura offline-first: os dados são gravados localmente antes de qualquer tentativa de rede.
-- Back4App/Parse como cópia central para sincronização e recuperação dos dados.
-- Fila de sincronização idempotente, com identificação única por registro e tratamento explícito de conflitos.
-- A Master Key do Parse nunca deve ser incluída no aplicativo.
+- Flutter Web com experiência PWA para instalar no notebook.
+- `get_it` para dependências, `go_router` para navegação e `signals` para estado reativo.
+- Dio para chamadas HTTP e integração com Back4App/Parse.
+- Arquitetura offline-first: persistir primeiro no armazenamento local do navegador; sincronizar com Back4App quando houver conexão.
+- Fila de sincronização idempotente, com identificador único por registro e tratamento explícito de conflitos.
+- A Master Key e a REST API Key do Parse nunca devem ser incluídas no cliente.
 
 ## Módulos previstos
 
@@ -23,17 +24,21 @@ Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da 
 ## Plano de implementação
 
 - [x] Registrar o escopo e a arquitetura inicial.
-- [ ] Criar a base Flutter para desktop e validar a plataforma alvo.
-- [ ] Implementar armazenamento local e migrações.
+- [ ] Criar a base Flutter Web/PWA seguindo a organização do Cormex.
+- [ ] Implementar armazenamento local persistente e migrações.
 - [ ] Implementar clientes, projetos, agenda e financeiro.
 - [ ] Conectar ao Back4App com autenticação e permissões restritas.
 - [ ] Implementar sincronização e recuperação de conflitos.
-- [ ] Validar o ciclo: cadastrar offline, fechar e reabrir, reconectar e confirmar sincronização.
+- [ ] Validar o ciclo: cadastrar offline, reabrir o app, reconectar e confirmar sincronização.
 
 ## Segurança
 
-O App ID e a Client Key do Parse podem estar no cliente, mas não substituem as permissões do servidor. Configurar CLPs/ACLs para permitir acesso apenas à conta autenticada e validar operações sensíveis no Cloud Code. Nunca distribuir a Master Key ou a REST API Key no executável.
+O App ID e a Client Key do Parse são identificadores do cliente, não controles de acesso. Configurar CLPs/ACLs para permitir acesso apenas à conta autenticada e validar operações sensíveis no Cloud Code. Nunca distribuir a Master Key ou a REST API Key no aplicativo.
+
+## Observação sobre uso offline
+
+O PWA pode trabalhar sem conexão depois que seus arquivos forem armazenados no navegador. Os dados de negócio precisam de armazenamento local persistente e sincronização própria. Como os dados offline ficam no dispositivo, o sistema também precisa orientar o usuário a sincronizar e manter cópia central no Back4App.
 
 ## Estado
 
-Repositório iniciado. O primeiro marco é validar a base Flutter desktop e o armazenamento local antes de depender de sincronização com a nuvem.
+Repositório iniciado do zero. A próxima entrega é a base de navegação e layout; em seguida implementamos o armazenamento local e o primeiro ciclo de sincronização.
