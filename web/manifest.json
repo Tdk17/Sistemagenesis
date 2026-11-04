@@ -1,9 +1,43 @@
 {
-  "name": "Sistema Genesis",
+  "id": "./",
+  "name": "Genesis Business OS",
   "short_name": "Genesis",
-  "start_url": ".",
+  "description": "Gestão privada de projetos, clientes, agenda e financeiro.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#F6F7FB",
-  "theme_color": "#6D4AFF",
-  "description": "Controle de projetos, clientes, agenda e financeiro."
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#07090D",
+  "theme_color": "#07090D",
+  "categories": ["business", "productivity", "finance"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/Icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/Icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/Icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/Icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }

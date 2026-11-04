@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sistema_genesis/Src/Config/appTheme.dart';
 import 'package:sistema_genesis/Src/Dependencies/dependencies.dart';
+import 'package:sistema_genesis/Src/Services/authController.dart';
+import 'package:sistema_genesis/Src/Services/genesisController.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencies();
+  await getIt<AuthController>().initialize();
+  await getIt<GenesisController>().initialize();
   runApp(const GenesisApp());
 }
 

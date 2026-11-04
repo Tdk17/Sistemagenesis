@@ -3,7 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sistema_genesis/Src/Config/appConfig.dart';
 import 'package:sistema_genesis/Src/Connection/httpManager.dart';
+import 'package:sistema_genesis/Src/Connection/parseApiClient.dart';
 import 'package:sistema_genesis/Src/Routes/appRouter.dart';
+import 'package:sistema_genesis/Src/Services/authController.dart';
+import 'package:sistema_genesis/Src/Services/genesisController.dart';
+import 'package:sistema_genesis/Src/Services/localDatabase.dart';
 
 final getIt = GetIt.instance;
 
@@ -21,9 +25,24 @@ void setupDependencies() {
     ),
   );
 
-  getIt.registerLazySingleton<HttpManager>(
-    () => HttpManager(getIt<Dio>()),
+  getIt.registerLazySingleton<HttpManager>(() => HttpManager(getIt<Dio>()));
+
+  getIt.registerLazySingleton<ParseApiClient>(
+    () => ParseApiClient(getIt<HttpManager>()),
+  );
+  getIt.registerLazySingleton<LocalDatabase>(LocalDatabase.new);
+  getIt.registerLazySingleton<AuthController>(
+    () => AuthController(getIt<ParseApiClient>(), getIt<LocalDatabase>()),
+  );
+  getIt.registerLazySingleton<GenesisController>(
+    () => GenesisController(
+      getIt<LocalDatabase>(),
+      getIt<ParseApiClient>(),
+      getIt<AuthController>(),
+    ),
   );
 
-  getIt.registerLazySingleton<GoRouter>(createAppRouter);
+  getIt.registerLazySingleton<GoRouter>(
+    () => createAppRouter(getIt<AuthController>()),
+  );
 }

@@ -29,7 +29,13 @@ jobs:
       - name: Compilar o painel
         env:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-        run: flutter build web --release --no-pub --base-href "${PAGES_BASE_PATH%/}/"
+          PARSE_APPLICATION_ID: ${{ secrets.PARSE_APPLICATION_ID }}
+          PARSE_JAVASCRIPT_KEY: ${{ secrets.PARSE_JAVASCRIPT_KEY }}
+        run: |
+          flutter build web --release --no-pub \
+            --base-href "${PAGES_BASE_PATH%/}/" \
+            --dart-define=PARSE_APPLICATION_ID="$PARSE_APPLICATION_ID" \
+            --dart-define=PARSE_JAVASCRIPT_KEY="$PARSE_JAVASCRIPT_KEY"
       - uses: actions/upload-pages-artifact@v4
         with:
           path: build/web

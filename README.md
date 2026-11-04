@@ -1,44 +1,97 @@
-# Sistema Genesis
+# Genesis Business OS
 
-Sistema pessoal para organizar projetos, clientes, agenda e fluxo financeiro da empresa.
+Sistema privado e offline-first para administrar projetos, clientes, agenda,
+domínios e fluxo financeiro. Construído em Flutter Web/PWA e preparado para
+sincronização com Back4App.
 
-## Direção técnica (padrão Cormex)
+## O que já funciona
 
-- Flutter Web com experiência PWA para instalar no notebook.
-- Organização baseada no Cormex: `lib/Src/Config`, `Connection`, `Dependencies`, `Models`, `Pages` e `Routes`; cada módulo receberá `Controller` e `Repository` ao ganhar CRUD.
-- `get_it` para dependências, `go_router` para navegação, `signals` para estado reativo e Dio para comunicação HTTP.
-- Arquitetura offline-first: persistir primeiro no armazenamento local do navegador; sincronizar com Back4App quando houver conexão.
-- Fila de sincronização idempotente, com identificador único por registro e tratamento explícito de conflitos.
-- A Master Key e a REST API Key do Parse nunca devem ser incluídas no cliente.
+- Login exclusivo, sem cadastro público.
+- Sessão persistente e proteção de rotas.
+- Dashboard com indicadores calculados a partir dos dados reais.
+- Pipeline Kanban com seis etapas e movimentação por arrastar e soltar.
+- CRUD completo de clientes, projetos, agenda e financeiro.
+- Controle de domínio, vencimento, endereço publicado e repositório por projeto.
+- Persistência local no navegador para continuar trabalhando sem conexão.
+- Interface responsiva para desktop e celular.
+- Manifesto PWA, ícones `any` e `maskable` e instalação na tela inicial.
+- Cliente REST do Parse, fila de alterações, exclusões pendentes e sincronização
+  manual com o Back4App.
 
-## Módulos previstos
+## Acesso local temporário
 
-1. Painel: projetos ativos, atrasos, vencimentos de domínio e valores a receber.
-2. Clientes: contatos e informações vinculadas aos projetos.
-3. Projetos: negociação, planejado, em andamento, atrasado e concluído; valor, escopo, datas e links.
-4. Ativos digitais: domínios, hospedagem e serviços associados, com datas e custos recorrentes.
-5. Agenda: apresentações, reuniões e tarefas com data e horário.
-6. Financeiro: receitas, despesas, categorias, vencimentos e situação de pagamento.
-7. Sincronização: estado da conexão, itens pendentes, último envio e conflitos para revisão.
+Enquanto as chaves do Back4App não estiverem configuradas, o build publicado
+entra em modo local:
 
-## Plano de implementação
+- E-mail: `admin@genesis.local`
+- Senha: `Genesis@2026`
 
-- [x] Registrar o escopo e a arquitetura inicial.
-- [x] Criar o scaffold Flutter Web/PWA com navegação e módulos iniciais.
-- [ ] Implementar armazenamento local persistente e migrações.
-- [ ] Implementar clientes, projetos, agenda e financeiro.
-- [ ] Conectar ao Back4App com autenticação e permissões restritas.
-- [ ] Implementar sincronização e recuperação de conflitos.
-- [ ] Validar o ciclo: cadastrar offline, reabrir o app, reconectar e confirmar sincronização.
+Esse acesso serve apenas para validar e usar os dados no próprio dispositivo.
+Quando `PARSE_APPLICATION_ID` e `PARSE_JAVASCRIPT_KEY` forem fornecidos, o modo
+local é desativado e o login passa a usar a classe `_User` do Parse.
 
-## Segurança
+## Conectar ao Back4App
 
-O App ID e a Client Key do Parse são identificadores do cliente, não controles de acesso. Configurar CLPs/ACLs para permitir acesso apenas à conta autenticada e validar operações sensíveis no Cloud Code. Nunca distribuir a Master Key ou a REST API Key no aplicativo.
+1. Crie um app no Back4App.
+2. Crie somente um usuário em **Database > `_User`**, usando o e-mail como
+   `username`. Não habilite cadastro público.
+3. Adicione os secrets abaixo no repositório GitHub:
+   - `PARSE_APPLICATION_ID`
+   - `PARSE_JAVASCRIPT_KEY`
+4. Execute novamente o workflow **Publicar Genesis no GitHub Pages**.
 
-## Observação sobre uso offline
+O aplicativo utiliza estas classes:
 
-O PWA pode trabalhar sem conexão depois que seus arquivos forem armazenados no navegador. Os dados de negócio precisam de armazenamento local persistente e sincronização própria. Como os dados offline ficam no dispositivo, o sistema também precisa orientar o usuário a sincronizar e manter cópia central no Back4App.
+| Classe | Conteúdo |
+| --- | --- |
+| `GenesisClient` | Clientes |
+| `GenesisProject` | Projetos e ativos digitais |
+| `GenesisAgenda` | Compromissos e tarefas |
+| `GenesisFinance` | Receitas e despesas |
 
-## Estado
+Na primeira sincronização, o Parse pode criar as classes se a criação via
+cliente estiver permitida. Em produção, prefira criar as quatro classes no
+painel e configurar as CLPs para exigir usuário autenticado. Cada registro novo
+recebe ACL exclusiva do usuário logado.
 
-Repositório iniciado do zero. O scaffold de configuração, dependências, rotas, tema e módulos está criado no padrão Cormex; as telas de projetos, clientes, agenda e financeiro ainda são placeholders. Próxima etapa: armazenamento local persistente e CRUD de projetos/clientes.
+> Nunca coloque a Master Key ou a REST API Key no Flutter, no GitHub Pages ou
+> em `--dart-define`. Elas devem existir apenas em Cloud Code/ambiente servidor.
+
+## Estrutura
+
+```text
+lib/Src/
+├── Config/       tema, identidade e variáveis de ambiente
+├── Connection/   cliente HTTP e Parse REST
+├── Dependencies/ injeção com get_it
+├── Models/       modelos e serialização local/remota
+├── Pages/        login, shell, dashboard e módulos de negócio
+├── Routes/       go_router e proteção de sessão
+└── Services/     autenticação, persistência e sincronização
+```
+
+## Desenvolvimento
+
+```bash
+flutter pub get
+flutter run -d chrome
+```
+
+Build conectado ao Back4App:
+
+```bash
+flutter build web --release \
+  --dart-define=PARSE_APPLICATION_ID=SEU_APP_ID \
+  --dart-define=PARSE_JAVASCRIPT_KEY=SUA_JAVASCRIPT_KEY
+```
+
+## Segurança antes de dados reais
+
+- Restrinja `Find`, `Get`, `Create`, `Update` e `Delete` das classes a usuários
+  autenticados.
+- Mantenha o cadastro público desativado e crie apenas a conta administrativa.
+- Use ACL por registro, já enviada pelo app nas criações.
+- Ative autenticação multifator no GitHub e no Back4App.
+- Troque a senha temporária ao conectar o banco.
+- Não trate o PWA instalado como barreira de segurança: a proteção real é feita
+  pela autenticação, CLPs, ACLs e validação no servidor.
